@@ -2,11 +2,9 @@ import 'package:deeplink/Bloc/App_Event.dart';
 import 'package:deeplink/Bloc/App_State.dart';
 import 'package:deeplink/Bloc/Bloc.dart';
 import 'package:deeplink/Helper/Helper.dart';
-import 'package:deeplink/Login/Event.dart';
 import 'package:deeplink/Login/LoginBloc.dart';
 import 'package:deeplink/Login/Referral.dart';
 import 'package:deeplink/Login/Register.dart';
-import 'package:deeplink/Repository/Repository.dart';
 import 'package:deeplink/Repository/RepositoryImpl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,13 +37,27 @@ class LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => LoginBlocs(
-        RepositoryProvider.of<Repository>(context),
-      )..add(LoadEvent()),
+        context.read<RepositoryImpl>(),
+      ),
       child: Scaffold(
-        backgroundColor: const Color(0xFFd1c9f3),
-        body: BlocBuilder<LoginBlocs, LoginState>(
-          builder: (context, state) {
-            return Form(
+          backgroundColor: const Color(0xFFd1c9f3),
+          body: BlocListener<LoginBlocs, LoginState>(
+            listener: (context, state) {
+              if (state is LoginErrorState) {
+                WidgetsBinding.instance?.addPostFrameCallback((_) {
+                  Helper.alertDialogWithCloseBtn(
+                      context, "Error!", "Invalid Credential");
+                });
+              } else if (state is LoadedLoginState) {
+                WidgetsBinding.instance?.addPostFrameCallback((_) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Referralpage()));
+                });
+              }
+            },
+            child: Form(
               key: _formKey,
               child: Center(
                 child: Padding(
@@ -110,72 +122,37 @@ class LoginForm extends StatelessWidget {
                               children: [
                                 Padding(
                                     padding: const EdgeInsets.only(top: 10),
-                                    child: StreamBuilder<Map>(
-                                        stream: loginBloc.loginStream,
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData &&
-                                              snapshot.data!['status'] ==
-                                                  'processing') {
-                                            isSuccess = true;
-                                            status = false;
-                                          } else if (snapshot.hasData &&
-                                              snapshot.data!['status'] ==
-                                                  'failed' &&
-                                              !status) {
-                                            isSuccess = false;
-                                            WidgetsBinding.instance
-                                                ?.addPostFrameCallback((_) {
-                                              Helper.alertDialogWithCloseBtn(
-                                                  context,
-                                                  "Error!",
-                                                  "Invalid Credential");
-                                            });
-                                            status = true;
-                                          } else if (snapshot.hasData &&
-                                              snapshot.data!['status'] ==
-                                                  'success' &&
-                                              !status) {
-                                            WidgetsBinding.instance
-                                                ?.addPostFrameCallback((_) {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          Referralpage()));
-                                            });
-                                            status = true;
+                                    child: BlocBuilder<LoginBlocs, LoginState>(
+                                        builder: (context, state) {
+                                      return ElevatedButton(
+                                        onPressed: () {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            BlocProvider.of<LoginBlocs>(context)
+                                                .add(LoadEvent(_email.text,
+                                                    _password.text));
                                           }
-
-                                          return ElevatedButton(
-                                            onPressed: () {
-                                              if (_formKey.currentState!
-                                                  .validate()) {
-                                                loginBloc.eventSink.add(
-                                                    LoginEvent(_email.text,
-                                                        _password.text));
-                                              }
-                                            },
-                                            child: isSuccess
-                                                ? const SizedBox(
-                                                    height: 20,
-                                                    width: 20,
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                      strokeWidth: 2,
-                                                      color: Colors.white,
-                                                    ),
-                                                  )
-                                                : const Text('Login'),
-                                            style: ElevatedButton.styleFrom(
-                                              minimumSize: const Size(100, 40),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        12), // <-- Radius
-                                              ),
-                                            ),
-                                          );
-                                        })),
+                                        },
+                                        child: state is LoadingLoginState
+                                            ? const SizedBox(
+                                                height: 20,
+                                                width: 20,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  strokeWidth: 2,
+                                                  color: Colors.white,
+                                                ),
+                                              )
+                                            : const Text('Login'),
+                                        style: ElevatedButton.styleFrom(
+                                          minimumSize: const Size(100, 40),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                12), // <-- Radius
+                                          ),
+                                        ),
+                                      );
+                                    })),
                               ]),
                           Row(
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -206,10 +183,8 @@ class LoginForm extends StatelessWidget {
                   ),
                 ),
               ),
-            );
-          },
-        ),
-      ),
+            ),
+          )),
     );
   }
 }
