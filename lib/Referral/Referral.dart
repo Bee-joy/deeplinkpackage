@@ -1,4 +1,5 @@
 import 'package:deeplink/Referral/Refer.dart';
+import 'package:deeplink/WebView/WebViewUi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 
@@ -10,13 +11,15 @@ class Referralpage extends StatefulWidget {
 
 class _ReferralpageState extends State<Referralpage> {
   Refer refer = Refer();
-  late Future<String> invitationUrl;
+  String? invitationUrl;
   @override
   void initState() {
     super.initState();
-    setState(() {
-      invitationUrl = refer.generateLink(Refer.referCode);
-    });
+    getReferralLink();
+  }
+
+  void getReferralLink() async {
+    invitationUrl = await refer.generateLink(Refer.referCode);
   }
 
   Future<void> _share(invitationLink, titleText, desc) async {
@@ -57,22 +60,21 @@ class _ReferralpageState extends State<Referralpage> {
               ],
             ),
             onPressed: () {
-              _share(invitationUrl, "test",
-                  "lets play use my rederrer link :$invitationUrl");
+              _share(invitationUrl, "test", "lets play use my referrer link");
             },
           ),
           FlatButton(
             child: Row(
               children: const [
                 Icon(
-                  Icons.logout,
+                  Icons.web,
                   color: Colors.blue,
                 ),
                 SizedBox(
                   width: 10,
                 ),
                 Text(
-                  'Logout',
+                  'WebView',
                   style: TextStyle(
                     color: Colors.black87,
                     fontSize: 14,
@@ -81,7 +83,8 @@ class _ReferralpageState extends State<Referralpage> {
               ],
             ),
             onPressed: () {
-              // bloc.logout();
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => WebViewUI()));
             },
           ),
         ],

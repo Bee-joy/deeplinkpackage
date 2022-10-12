@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 
 class Refer {
-  static late String referCode;
+  static String referCode = '';
   Future<String> generateLink(String referCode) async {
     var invitationLink = 'https://rayydeeplink.page.link/refer?code=$referCode';
     final dynamicLinkParams = DynamicLinkParameters(
