@@ -3,6 +3,6 @@ import 'package:flutter/material.dart';
 
 class Routes {
   static Map<String, WidgetBuilder> all = <String, WidgetBuilder>{
-    '/test': (BuildContext context) => Register(),
+    '/test1': (BuildContext context) => const Register(),
   };
 }

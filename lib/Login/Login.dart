@@ -1,22 +1,46 @@
 import 'package:deeplink/Bloc/App_Event.dart';
 import 'package:deeplink/Bloc/App_State.dart';
-import 'package:deeplink/Bloc/Bloc.dart';
+import 'package:deeplink/Bloc/LoginBloc.dart';
 import 'package:deeplink/Helper/Helper.dart';
-import 'package:deeplink/Login/LoginBloc.dart';
-import 'package:deeplink/Login/Referral.dart';
 import 'package:deeplink/Login/Register.dart';
-import 'package:deeplink/Repository/RepositoryImpl.dart';
+import 'package:deeplink/Referral/Referral.dart';
+import 'package:deeplink/Repository/Repository.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
+
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  void initFirebaseNotificationListener() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      Helper.dialog(
+          message.notification!.title, message.notification!.body, context);
+      FirebaseMessaging.onMessageOpenedApp.listen((message) {
+        //when user tap on the notification
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    setState(() {
+      initFirebaseNotificationListener();
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: RepositoryProvider(
-        create: (context) => RepositoryImpl(),
+        create: (context) => Repository(),
         child: LoginForm(),
       ),
     );
@@ -28,27 +52,23 @@ class LoginForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final _email = TextEditingController();
   final _password = TextEditingController();
-  final loginBloc = LoginBloc();
-  bool isSuccess = false;
-
-  bool status = false;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LoginBlocs(
-        context.read<RepositoryImpl>(),
+      create: (context) => LoginBloc(
+        context.read<Repository>(),
       ),
       child: Scaffold(
           backgroundColor: const Color(0xFFd1c9f3),
-          body: BlocListener<LoginBlocs, LoginState>(
+          body: BlocListener<LoginBloc, AppState>(
             listener: (context, state) {
-              if (state is LoginErrorState) {
+              if (state is ErrorState) {
                 WidgetsBinding.instance?.addPostFrameCallback((_) {
                   Helper.alertDialogWithCloseBtn(
                       context, "Error!", "Invalid Credential");
                 });
-              } else if (state is LoadedLoginState) {
+              } else if (state is LoadedState) {
                 WidgetsBinding.instance?.addPostFrameCallback((_) {
                   Navigator.push(
                       context,
@@ -122,18 +142,18 @@ class LoginForm extends StatelessWidget {
                               children: [
                                 Padding(
                                     padding: const EdgeInsets.only(top: 10),
-                                    child: BlocBuilder<LoginBlocs, LoginState>(
+                                    child: BlocBuilder<LoginBloc, AppState>(
                                         builder: (context, state) {
                                       return ElevatedButton(
                                         onPressed: () {
                                           if (_formKey.currentState!
                                               .validate()) {
-                                            BlocProvider.of<LoginBlocs>(context)
-                                                .add(LoadEvent(_email.text,
+                                            BlocProvider.of<LoginBloc>(context)
+                                                .add(LoginEvent(_email.text,
                                                     _password.text));
                                           }
                                         },
-                                        child: state is LoadingLoginState
+                                        child: state is LoadingState
                                             ? const SizedBox(
                                                 height: 20,
                                                 width: 20,
@@ -164,7 +184,8 @@ class LoginForm extends StatelessWidget {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => Register()),
+                                              builder: (context) =>
+                                                  const Register()),
                                         );
                                       },
                                       child: const Text('Register'),

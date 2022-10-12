@@ -21,29 +21,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  static var link;
-  String dyanmicLink = '';
-
   @override
   void initState() {
     super.initState();
     setState(() {
       getN();
-      //configureNotifications();
       notificationSetting();
-      // initFirebaseNotificationListener();
       initDynamicLinks();
     });
   }
-
-  // void initFirebaseNotificationListener() {
-  //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-  //     Helper.showToast("notification received");
-  //     FirebaseMessaging.onMessageOpenedApp.listen((message) {
-  //       //when user tap on the notification
-  //     });
-  //   });
-  // }
 
   final FirebaseMessaging _notifications = FirebaseMessaging.instance;
   Future<void> initDynamicLinks() async {
@@ -96,10 +82,10 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
         routes: Routes.all,
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'Deeplink',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: Login());
+        home: const Login());
   }
 }

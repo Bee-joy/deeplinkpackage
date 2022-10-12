@@ -8,8 +8,16 @@ abstract class Event extends Equatable {
   List<Object?> get props => [];
 }
 
-class LoadEvent extends Event {
+class LoginEvent extends Event {
   final String email;
   final String password;
-  const LoadEvent(this.email, this.password);
+  const LoginEvent(this.email, this.password);
+}
+
+class RegisterEvent extends Event {
+  String username;
+  String email;
+  String password;
+  String referalCode;
+  RegisterEvent(this.username, this.email, this.password, this.referalCode);
 }

@@ -2,26 +2,26 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
 @immutable
-abstract class LoginState extends Equatable {}
+abstract class AppState extends Equatable {}
 
-class InitialState extends LoginState {
+class InitialState extends AppState {
   @override
   List<Object?> get props => [];
 }
 
-class LoadingLoginState extends LoginState {
+class LoadingState extends AppState {
   @override
   List<Object?> get props => [];
 }
 
-class LoadedLoginState extends LoginState {
+class LoadedState extends AppState {
   @override
   List<Object?> get props => [];
 }
 
-class LoginErrorState extends LoginState {
+class ErrorState extends AppState {
   @override
-  LoginErrorState(this.error);
+  ErrorState(this.error);
   final String error;
   List<Object?> get props => [error];
 }

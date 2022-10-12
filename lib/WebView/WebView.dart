@@ -4,9 +4,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViews extends StatefulWidget {
   final String url;
-
   const WebViews(this.url, {Key? key}) : super(key: key);
-
   @override
   State<WebViews> createState() => _WebViewsState();
 }

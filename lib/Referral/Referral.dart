@@ -1,50 +1,21 @@
-import 'dart:math';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:deeplink/Login/LoginBloc.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:deeplink/Referral/Refer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 
 class Referralpage extends StatefulWidget {
   const Referralpage({Key? key}) : super(key: key);
-
   @override
   State<Referralpage> createState() => _ReferralpageState();
 }
 
 class _ReferralpageState extends State<Referralpage> {
-  LoginBloc bloc = LoginBloc();
-  String generateCode(String prefix) {
-    Random random = Random();
-    var id = random.nextInt(92143543) + 0945123456;
-    return '$prefix-${(id.toString().substring(0, 8))}';
-  }
-
-  String invitationUrl = '';
-  void generateLink(String? referCode) async {
-    var invitationLink = 'https://rayydeeplink.page.link/refer?code=$referCode';
-    final dynamicLinkParams = DynamicLinkParameters(
-        link: Uri.parse(invitationLink),
-        uriPrefix: 'https://rayydeeplink.page.link',
-        androidParameters: const AndroidParameters(
-            packageName: "com.beejoy.app", minimumVersion: 20),
-        socialMetaTagParameters: SocialMetaTagParameters(
-            title: "REFER A FRIEND AND EARN",
-            description: "EARN RS 1000",
-            imageUrl: Uri.parse(
-                "https://images.pexels.com/photos/213780/pexels-photo-213780.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500")));
-    var dynamicLink =
-        await FirebaseDynamicLinks.instance.buildShortLink(dynamicLinkParams);
-    setState(() {
-      invitationUrl = dynamicLink.shortUrl.toString();
-    });
-  }
-
+  Refer refer = Refer();
+  late Future<String> invitationUrl;
   @override
   void initState() {
     super.initState();
     setState(() {
-      generateLink(LoginBloc.referCode);
+      invitationUrl = refer.generateLink(Refer.referCode);
     });
   }
 
@@ -110,7 +81,7 @@ class _ReferralpageState extends State<Referralpage> {
               ],
             ),
             onPressed: () {
-              bloc.logout();
+              // bloc.logout();
             },
           ),
         ],
