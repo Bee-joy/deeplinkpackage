@@ -1,6 +1,6 @@
 import 'package:deeplink/Bloc/App_Event.dart';
 import 'package:deeplink/Bloc/App_State.dart';
-import 'package:deeplink/Bloc/RegisterBloc.dart';
+import 'package:deeplink/Bloc/LoginBloc.dart';
 import 'package:deeplink/Helper/Helper.dart';
 import 'package:deeplink/Login/Login.dart';
 import 'package:deeplink/Repository/Repository.dart';
@@ -33,12 +33,12 @@ class RegisterForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => RegisterBloc(
+      create: (context) => LoginBloc(
         context.read<Repository>(),
       ),
       child: Scaffold(
         backgroundColor: const Color(0xFFd1c9f3),
-        body: BlocListener<RegisterBloc, AppState>(
+        body: BlocListener<LoginBloc, AppState>(
           listener: (context, state) {
             if (state is ErrorState) {
               WidgetsBinding.instance?.addPostFrameCallback((_) {
@@ -133,12 +133,12 @@ class RegisterForm extends StatelessWidget {
                             children: [
                               Padding(
                                   padding: const EdgeInsets.only(top: 10),
-                                  child: BlocBuilder<RegisterBloc, AppState>(
+                                  child: BlocBuilder<LoginBloc, AppState>(
                                       builder: (context, state) {
                                     return ElevatedButton(
                                       onPressed: () {
                                         if (_formKey.currentState!.validate()) {
-                                          BlocProvider.of<RegisterBloc>(context)
+                                          BlocProvider.of<LoginBloc>(context)
                                               .add(RegisterEvent(
                                                   _username.text,
                                                   _email.text,

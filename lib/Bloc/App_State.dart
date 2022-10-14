@@ -10,13 +10,18 @@ class InitialState extends AppState {
 }
 
 class LoadingState extends AppState {
+  LoadingState(this.loginFrom);
+  final String loginFrom;
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [loginFrom];
 }
 
 class LoadedState extends AppState {
+  LoadedState(this.login);
+  final bool login;
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [login];
 }
 
 class ErrorState extends AppState {

@@ -21,3 +21,12 @@ class RegisterEvent extends Event {
   String referalCode;
   RegisterEvent(this.username, this.email, this.password, this.referalCode);
 }
+
+class GoogleLogin extends Event {
+  const GoogleLogin();
+}
+
+class GoogleLogOut extends Event {
+  BuildContext context;
+  GoogleLogOut(this.context);
+}

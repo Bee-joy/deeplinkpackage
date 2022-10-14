@@ -5,9 +5,11 @@ import 'package:deeplink/Helper/Helper.dart';
 import 'package:deeplink/Login/Register.dart';
 import 'package:deeplink/Referral/Referral.dart';
 import 'package:deeplink/Repository/Repository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -53,6 +55,23 @@ class LoginForm extends StatelessWidget {
   final _email = TextEditingController();
   final _password = TextEditingController();
 
+  void googleLogin() {
+    Future.delayed(Duration.zero, () {
+      final user = FirebaseAuth.instance.currentUser!;
+      var email = user.email;
+      var uid = user.uid;
+
+      Fluttertoast.showToast(
+          msg: "email : $email \n uid : $uid ",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          fontSize: 14.0);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -69,6 +88,9 @@ class LoginForm extends StatelessWidget {
                       context, "Error!", "Invalid Credential");
                 });
               } else if (state is LoadedState) {
+                if (state.login) {
+                  googleLogin();
+                }
                 WidgetsBinding.instance?.addPostFrameCallback((_) {
                   Navigator.push(
                       context,
@@ -144,56 +166,108 @@ class LoginForm extends StatelessWidget {
                                     padding: const EdgeInsets.only(top: 10),
                                     child: BlocBuilder<LoginBloc, AppState>(
                                         builder: (context, state) {
-                                      return ElevatedButton(
-                                        onPressed: () {
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            BlocProvider.of<LoginBloc>(context)
-                                                .add(LoginEvent(_email.text,
-                                                    _password.text));
-                                          }
-                                        },
-                                        child: state is LoadingState
-                                            ? const SizedBox(
-                                                height: 20,
-                                                width: 20,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  strokeWidth: 2,
-                                                  color: Colors.white,
-                                                ),
-                                              )
-                                            : const Text('Login'),
-                                        style: ElevatedButton.styleFrom(
-                                          minimumSize: const Size(100, 40),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                12), // <-- Radius
+                                      return SizedBox(
+                                        height: 40,
+                                        width: 150,
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              BlocProvider.of<LoginBloc>(
+                                                      context)
+                                                  .add(LoginEvent(_email.text,
+                                                      _password.text));
+                                            }
+                                          },
+                                          child: state is LoadingState &&
+                                                  state.loginFrom == 'login'
+                                              ? const SizedBox(
+                                                  height: 20,
+                                                  width: 20,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    strokeWidth: 2,
+                                                    color: Colors.white,
+                                                  ),
+                                                )
+                                              : const Text('Login'),
+                                          style: ElevatedButton.styleFrom(
+                                            minimumSize: const Size(100, 40),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      12), // <-- Radius
+                                            ),
                                           ),
                                         ),
                                       );
                                     })),
                               ]),
                           Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Padding(
-                                    padding: const EdgeInsets.only(top: 10),
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: BlocBuilder<LoginBloc, AppState>(
+                                    builder: (context, state) {
+                                  return SizedBox(
+                                    height: 40,
+                                    width: 150,
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const Register()),
-                                        );
+                                        BlocProvider.of<LoginBloc>(context)
+                                            .add(const GoogleLogin());
                                       },
-                                      child: const Text('Register'),
+                                      child: state is LoadingState &&
+                                              state.loginFrom == 'google'
+                                          ? const SizedBox(
+                                              height: 20,
+                                              width: 20,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                                color: Colors.white,
+                                              ),
+                                            )
+                                          : const Text(
+                                              'Login with Google',
+                                            ),
                                       style: ElevatedButton.styleFrom(
                                         minimumSize: const Size(100, 40),
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(
                                               12), // <-- Radius
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                              )
+                            ],
+                          ),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Padding(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: SizedBox(
+                                      height: 40,
+                                      width: 150,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const Register()),
+                                          );
+                                        },
+                                        child: const Text('Register'),
+                                        style: ElevatedButton.styleFrom(
+                                          minimumSize: const Size(100, 40),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                12), // <-- Radius
+                                          ),
                                         ),
                                       ),
                                     )),

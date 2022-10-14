@@ -25,10 +25,19 @@ class WebViewUI extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 8, right: 15, left: 15),
+                  padding: const EdgeInsets.only(right: 15, left: 15),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: InkWell(
+                            child: const Icon(Icons.arrow_back,
+                                color: Colors.black),
+                            onTap: () {
+                              Navigator.pop(context);
+                            }),
+                      ),
                       const SizedBox(height: 16),
                       Center(
                         child: TextFormField(

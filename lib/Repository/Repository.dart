@@ -1,11 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:deeplink/Referral/Refer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Repository {
   static String? referCode;
   final _auth = FirebaseAuth.instance;
   Refer refer = Refer();
+  final googleSignIn = GoogleSignIn();
+  GoogleSignInAccount? _user;
+  GoogleSignInAccount get user => _user!;
 
   Future login(String email, String password) async {
     UserCredential authResult = await _auth.signInWithEmailAndPassword(
@@ -45,5 +49,20 @@ class Repository {
         email: email, password: password);
     final uid = currentUser.user?.uid;
     return uid;
+  }
+
+  Future googleLogin() async {
+    final googleUser = await googleSignIn.signIn();
+    if (googleUser == null) return;
+    _user = googleUser;
+    final googleAuth = await googleUser.authentication;
+    final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
+    await FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
+  Future googleLogOut() async {
+    await googleSignIn.disconnect();
+    FirebaseAuth.instance.signOut();
   }
 }
