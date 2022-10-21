@@ -1,4 +1,8 @@
+import 'package:country_codes/country_codes.dart';
 import 'package:deeplink/Login/Login.dart';
+import 'package:deeplink/Login/SplashScreen/SplashScreen.dart';
+import 'package:deeplink/Onboarding/LoginOption.dart';
+import 'package:deeplink/Onboarding/Phone.dart';
 import 'package:deeplink/Routes/Routes.dart';
 import 'package:deeplink/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,6 +13,7 @@ import 'package:get/get.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await CountryCodes.init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
@@ -82,10 +87,10 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
         routes: Routes.all,
         debugShowCheckedModeBanner: false,
-        title: 'Deeplink',
+        title: 'Rayy',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const Login());
+        home: OnboardingScreen2());
   }
 }

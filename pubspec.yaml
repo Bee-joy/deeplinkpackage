@@ -51,6 +51,8 @@ dependencies:
   flutter_secure_storage: ^6.0.0
   flutter_bloc: ^8.1.1
   equatable: ^2.0.5
+  country_codes: ^2.2.0
+  intl_phone_field: ^3.1.0
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,7 @@
 import 'package:deeplink/Bloc/App_Event.dart';
 import 'package:deeplink/Bloc/App_State.dart';
 import 'package:deeplink/Login/Login.dart';
+import 'package:deeplink/Onboarding/LoginOption.dart';
 import 'package:deeplink/Repository/Repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,7 @@ class LoginBloc extends Bloc<Event, AppState> {
       try {
         final users = await _repository.googleLogOut();
         Navigator.push(event.context,
-            MaterialPageRoute(builder: (context) => const Login()));
+            MaterialPageRoute(builder: (context) => const LoginOption()));
       } catch (e) {
         emit(ErrorState(e.toString()));
         print(e);
