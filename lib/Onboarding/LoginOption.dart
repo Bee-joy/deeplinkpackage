@@ -2,7 +2,7 @@ import 'package:deeplink/Bloc/App_Event.dart';
 import 'package:deeplink/Bloc/App_State.dart';
 import 'package:deeplink/Bloc/LoginBloc.dart';
 import 'package:deeplink/Helper/Helper.dart';
-import 'package:deeplink/Onboarding/CustomField.dart';
+import 'package:deeplink/Custom/CustomField.dart';
 import 'package:deeplink/Referral/Referral.dart';
 import 'package:deeplink/Repository/Repository.dart';
 import 'package:deeplink/Utilities/Color.dart';
@@ -85,7 +85,7 @@ class _LoginOptionState extends State<LoginOption> {
               });
             } else if (state is LoadedState) {
               if (state.login) {
-                GoogleLogin();
+                const GoogleLogin();
               }
               WidgetsBinding.instance?.addPostFrameCallback((_) {
                 Navigator.push(

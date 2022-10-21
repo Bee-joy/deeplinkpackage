@@ -91,6 +91,6 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: OnboardingScreen2());
+        home: const LoginWithPhone());
   }
 }
