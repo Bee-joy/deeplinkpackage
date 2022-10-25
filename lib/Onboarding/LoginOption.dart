@@ -7,6 +7,7 @@ import 'package:deeplink/Referral/Referral.dart';
 import 'package:deeplink/Repository/Repository.dart';
 import 'package:deeplink/Routes/Routes.dart';
 import 'package:deeplink/Utilities/Color.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -45,6 +46,7 @@ class _LoginOptionState extends State<LoginOption> {
         context.read<Repository>(),
       ),
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           centerTitle: true,
           leading: const Padding(
@@ -87,13 +89,16 @@ class _LoginOptionState extends State<LoginOption> {
             } else if (state is LoadedState) {
               if (state.login) {
                 const GoogleLogin();
+                final user = FirebaseAuth.instance.currentUser!;
+                if (user.uid != null) {
+                  WidgetsBinding.instance?.addPostFrameCallback((_) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Referralpage()));
+                  });
+                }
               }
-              WidgetsBinding.instance?.addPostFrameCallback((_) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const Referralpage()));
-              });
             }
           },
           child: Column(

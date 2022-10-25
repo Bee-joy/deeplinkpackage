@@ -30,3 +30,7 @@ class GoogleLogOut extends Event {
   BuildContext context;
   GoogleLogOut(this.context);
 }
+
+class LocalAuthApi extends Event {
+  const LocalAuthApi();
+}

@@ -54,6 +54,15 @@ class _LoginOtpPageState extends State<LoginOtpPage> {
         otpList.removeAt(0);
       }
     });
+    if (otpList.length >= 5) {
+      validationTextVisibility(false);
+    }
+  }
+
+  void validationTextVisibility(value) {
+    setState(() {
+      validationTextVisible = value;
+    });
   }
 
   bool validationTextVisible = false;
@@ -296,9 +305,7 @@ class _LoginOtpPageState extends State<LoginOtpPage> {
                             Routes.LOCATION,
                           );
                         } else {
-                          setState(() {
-                            validationTextVisible = true;
-                          });
+                          validationTextVisibility(true);
                         }
                       },
                       backgroundColor: const Color(0xff0312A91),

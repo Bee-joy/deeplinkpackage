@@ -1,9 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:deeplink/Enum/NetworkStatus.dart';
 import 'package:deeplink/Referral/Refer.dart';
+import 'package:deeplink/Service/ApiService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class Repository {
+  ApiResponse verifyResponse = ApiResponse(status: NetworkStatus.IDLE);
+  final ApiService apiService = ApiService();
   static String? referCode;
   final _auth = FirebaseAuth.instance;
   Refer refer = Refer();

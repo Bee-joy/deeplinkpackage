@@ -55,11 +55,15 @@ class LoginForm extends StatelessWidget {
   final _email = TextEditingController();
   final _password = TextEditingController();
 
-  void googleLogin() {
+  void googleLogin(BuildContext context) {
     Future.delayed(Duration.zero, () {
       final user = FirebaseAuth.instance.currentUser!;
       var email = user.email;
       var uid = user.uid;
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const Referralpage()));
+      });
 
       Fluttertoast.showToast(
           msg: "email : $email \n uid : $uid ",
@@ -89,14 +93,8 @@ class LoginForm extends StatelessWidget {
                 });
               } else if (state is LoadedState) {
                 if (state.login) {
-                  googleLogin();
+                  googleLogin(context);
                 }
-                WidgetsBinding.instance?.addPostFrameCallback((_) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const Referralpage()));
-                });
               }
             },
             child: Form(

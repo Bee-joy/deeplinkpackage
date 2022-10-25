@@ -24,6 +24,7 @@ class LoginBloc extends Bloc<Event, AppState> {
       emit(LoadingState("google"));
       try {
         final users = await _repository.googleLogin();
+
         emit(LoadedState(true));
       } catch (e) {
         emit(ErrorState(e.toString()));
@@ -45,7 +46,7 @@ class LoginBloc extends Bloc<Event, AppState> {
       try {
         final users = await _repository.googleLogOut();
         Navigator.push(event.context,
-            MaterialPageRoute(builder: (context) => const LoginOption()));
+            MaterialPageRoute(builder: (context) => const LoginPage()));
       } catch (e) {
         emit(ErrorState(e.toString()));
         print(e);
