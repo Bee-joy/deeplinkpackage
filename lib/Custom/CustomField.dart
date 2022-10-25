@@ -38,13 +38,6 @@ class CustomFormField extends StatelessWidget {
       keyboardType: keyboardType,
       onFieldSubmitted: OnFieldSubmitted,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: validator ??
-          (value) {
-            if (value!.isEmpty) {
-              return "Please enter blank field";
-            }
-            return null;
-          },
       initialValue: initalValue,
       inputFormatters: inputFormatters,
       style: const TextStyle(
@@ -100,7 +93,7 @@ class CustomElevatedButton extends StatelessWidget {
                 style: TextStyle(
                     fontStyle: FontStyle.normal,
                     fontFamily: 'Open Sans',
-                    fontSize: 12,
+                    fontSize: 14,
                     color: textColor!),
               ),
             ],

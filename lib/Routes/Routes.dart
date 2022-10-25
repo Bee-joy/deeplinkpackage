@@ -44,7 +44,7 @@ class Routes {
         return MaterialPageRoute(
             builder: (_) => EmailpasswordPage(settings.arguments.toString()));
       case Routes.LOGIN_WITH_PHONE:
-        return MaterialPageRoute(builder: (_) => const LoginWithPhone());
+        return MaterialPageRoute(builder: (_) => LoginWithPhone());
       case Routes.LOGIN_OTP:
         return MaterialPageRoute(
             builder: (_) => LoginOtp(settings.arguments.toString()));

@@ -16,7 +16,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   void initState() {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        statusBarColor: primaryColor,
+        statusBarColor: Colors.transparent,
         systemNavigationBarColor: Colors.white,
         statusBarIconBrightness: Brightness.light));
   }

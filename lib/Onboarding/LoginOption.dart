@@ -5,6 +5,7 @@ import 'package:deeplink/Helper/Helper.dart';
 import 'package:deeplink/Custom/CustomField.dart';
 import 'package:deeplink/Referral/Referral.dart';
 import 'package:deeplink/Repository/Repository.dart';
+import 'package:deeplink/Routes/Routes.dart';
 import 'package:deeplink/Utilities/Color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -150,8 +151,8 @@ class _LoginOptionState extends State<LoginOption> {
                           builder: (context, state) {
                         return CustomElevatedButton(
                           onButtonClicked: () {
-                            BlocProvider.of<LoginBloc>(context)
-                                .add(const GoogleLogin());
+                            Routes.navigateToPage(
+                                context, Routes.LOGIN_WITH_PHONE);
                           },
                           backgroundColor: whiteColor,
                           title: 'Sign in with phone number',
@@ -195,62 +196,65 @@ class _LoginOptionState extends State<LoginOption> {
                 ),
               ),
               Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  child: SizedBox(
-                      width: 320,
-                      height: 70,
-                      child: Align(
-                        child: RichText(
-                            text: const TextSpan(
-                          children: [
-                            TextSpan(
-                              text:
-                                  "By signing in or creating on account,you agree with our ",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 13,
-                                  height: 1.5),
-                            ),
-                            TextSpan(
-                              children: [
-                                WidgetSpan(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: 30),
-                                    child: Text("Terms & conditions",
-                                        style: TextStyle(
-                                            color: cyanBlue,
-                                            fontSize: 13,
-                                            decorationThickness: 1,
-                                            decorationStyle:
-                                                TextDecorationStyle.solid)),
-                                  ),
-                                )
-                              ],
-                            ),
-                            TextSpan(
-                              children: [
-                                WidgetSpan(
-                                    child: Padding(
-                                        padding: EdgeInsets.only(left: 2),
-                                        child: Text("and")),
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 13,
-                                        height: 1.5))
-                              ],
-                            ),
-                            TextSpan(
-                                text: " Privacy Statement",
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: SizedBox(
+                        width: 320,
+                        height: 70,
+                        child: Align(
+                          child: RichText(
+                              text: const TextSpan(
+                            children: [
+                              TextSpan(
+                                text:
+                                    "By signing in or creating on account,you agree with our ",
                                 style: TextStyle(
-                                    color: cyanBlue,
+                                    color: Colors.black,
                                     fontSize: 13,
-                                    decorationThickness: 1,
-                                    decorationStyle:
-                                        TextDecorationStyle.solid)),
-                          ],
+                                    height: 1.5),
+                              ),
+                              TextSpan(
+                                children: [
+                                  WidgetSpan(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(left: 30),
+                                      child: Text("Terms & conditions",
+                                          style: TextStyle(
+                                              color: cyanBlue,
+                                              fontSize: 13,
+                                              decorationThickness: 1,
+                                              decorationStyle:
+                                                  TextDecorationStyle.solid)),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              TextSpan(
+                                children: [
+                                  WidgetSpan(
+                                      child: Padding(
+                                          padding: EdgeInsets.only(left: 2),
+                                          child: Text("and")),
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 13,
+                                          height: 1.5))
+                                ],
+                              ),
+                              TextSpan(
+                                  text: " Privacy Statement",
+                                  style: TextStyle(
+                                      color: cyanBlue,
+                                      fontSize: 13,
+                                      decorationThickness: 1,
+                                      decorationStyle:
+                                          TextDecorationStyle.solid)),
+                            ],
+                          )),
                         )),
-                      )),
+                  ),
                 ),
               )
             ],

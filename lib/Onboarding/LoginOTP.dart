@@ -40,11 +40,24 @@ class LoginOtpPage extends StatefulWidget {
 }
 
 class _LoginOtpPageState extends State<LoginOtpPage> {
+  final _formKey = GlobalKey<FormState>();
   FocusNode textFieldOne = FocusNode();
   FocusNode textFieldTwo = FocusNode();
   FocusNode textFieldThree = FocusNode();
   FocusNode textFieldFour = FocusNode();
   FocusNode textFieldFive = FocusNode();
+  void otp(value) {
+    setState(() {
+      if (value.isNotEmpty) {
+        otpList.add(value);
+      } else {
+        otpList.removeAt(0);
+      }
+    });
+  }
+
+  bool validationTextVisible = false;
+  List otpList = [];
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -52,7 +65,7 @@ class _LoginOtpPageState extends State<LoginOtpPage> {
         context.read<Repository>(),
       ),
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           centerTitle: true,
           leading: const Padding(
@@ -85,191 +98,220 @@ class _LoginOtpPageState extends State<LoginOtpPage> {
               });
             }
           },
-          child: Column(
-            children: [
-              Container(height: 4.0, color: const Color(0xff01877F2)),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    const Align(
-                      alignment: Alignment.topLeft,
-                      child: Text("Please enter the verification code ",
-                          style: TextStyle(
-                            fontSize: 14,
-                            height: 1.5,
-                            color: Color(0xff08C8E8F),
-                            fontFamily: 'Open Sans',
-                          )),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(widget.contactNumber,
-                              style: const TextStyle(
-                                  fontFamily: "Open Sans",
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 18,
-                                  color: Color(0xff0343739),
-                                  decorationStyle: TextDecorationStyle.solid)),
-                        ),
-                        const SizedBox(width: 8),
-                        InkWell(
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                "assets/images/edit.png",
-                                height: 22,
-                              ),
-                              const SizedBox(width: 8),
-                              const Text("Edit",
-                                  style: TextStyle(color: Color(0xff26458C)))
-                            ],
-                          ),
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    const Align(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Container(height: 4.0, color: const Color(0xff01877F2)),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      const Align(
                         alignment: Alignment.topLeft,
-                        child: Text(
-                          "OTP",
-                          style: TextStyle(color: Color(0xff8A8A8A)),
-                        )),
-                    Row(
-                      children: [
-                        Expanded(
-                            child: CustomFormField(
-                          autoFocus: true,
-                          keyboardType: TextInputType.phone,
-                          obscureText: false,
-                          onChanged: (_) {
-                            textFieldTwo.requestFocus();
-                          },
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp('[0-9]')),
-                            LengthLimitingTextInputFormatter(1)
-                          ],
-                          focusNode: textFieldOne,
-                        )),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                            child: CustomFormField(
-                          autoFocus: true,
-                          keyboardType: TextInputType.phone,
-                          obscureText: false,
-                          onChanged: (_) {
-                            textFieldThree.requestFocus();
-                          },
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp('[0-9]')),
-                            LengthLimitingTextInputFormatter(1)
-                          ],
-                          focusNode: textFieldTwo,
-                        )),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                            child: CustomFormField(
-                          autoFocus: true,
-                          keyboardType: TextInputType.phone,
-                          obscureText: false,
-                          onChanged: (_) {
-                            textFieldFour.requestFocus();
-                          },
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp('[0-9]')),
-                            LengthLimitingTextInputFormatter(1)
-                          ],
-                          focusNode: textFieldThree,
-                        )),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                            child: CustomFormField(
-                          autoFocus: true,
-                          keyboardType: TextInputType.phone,
-                          obscureText: false,
-                          onChanged: (_) {
-                            textFieldFive.requestFocus();
-                          },
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp('[0-9]')),
-                            LengthLimitingTextInputFormatter(1)
-                          ],
-                          focusNode: textFieldFour,
-                        )),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                            child: CustomFormField(
-                          autoFocus: true,
-                          keyboardType: TextInputType.phone,
-                          obscureText: false,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp('[0-9]')),
-                            LengthLimitingTextInputFormatter(1)
-                          ],
-                          focusNode: textFieldFive,
-                        )),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
-                      "Use Password",
-                      style: TextStyle(color: Color(0xff26458C)),
-                    ),
-                    Text(
-                      "Resend Code",
-                      style: TextStyle(color: Color(0xff26458C)),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 100,
-              ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: CustomElevatedButton(
-                    onButtonClicked: () {
-                      Routes.navigateToPage(
-                        context,
-                        Routes.LOCATION,
-                      );
-                    },
-                    backgroundColor: const Color(0xff0312A91),
-                    textColor: whiteColor,
-                    title: 'Verify',
+                        child: Text("Please enter the verification code ",
+                            style: TextStyle(
+                              fontSize: 14,
+                              height: 1.5,
+                              color: Color(0xff08C8E8F),
+                              fontFamily: 'Open Sans',
+                            )),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(widget.contactNumber,
+                                style: const TextStyle(
+                                    fontFamily: "Open Sans",
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 18,
+                                    color: Color(0xff0343739),
+                                    decorationStyle:
+                                        TextDecorationStyle.solid)),
+                          ),
+                          const SizedBox(width: 8),
+                          InkWell(
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  "assets/images/edit.png",
+                                  height: 22,
+                                ),
+                                const SizedBox(width: 8),
+                                const Text("Edit",
+                                    style: TextStyle(color: Color(0xff26458C)))
+                              ],
+                            ),
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      const Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "OTP",
+                            style: TextStyle(color: Color(0xff8A8A8A)),
+                          )),
+                      Row(
+                        children: [
+                          Expanded(
+                              child: CustomFormField(
+                            autoFocus: true,
+                            keyboardType: TextInputType.phone,
+                            obscureText: false,
+                            onChanged: (value) {
+                              otp(value);
+                              textFieldTwo.requestFocus();
+                            },
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp('[0-9]')),
+                              LengthLimitingTextInputFormatter(1)
+                            ],
+                            focusNode: textFieldOne,
+                          )),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                              child: CustomFormField(
+                            autoFocus: true,
+                            keyboardType: TextInputType.phone,
+                            obscureText: false,
+                            onChanged: (value) {
+                              otp(value);
+                              textFieldThree.requestFocus();
+                            },
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp('[0-9]')),
+                              LengthLimitingTextInputFormatter(1)
+                            ],
+                            focusNode: textFieldTwo,
+                          )),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                              child: CustomFormField(
+                            autoFocus: true,
+                            keyboardType: TextInputType.phone,
+                            obscureText: false,
+                            onChanged: (value) {
+                              otp(value);
+                              textFieldFour.requestFocus();
+                            },
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp('[0-9]')),
+                              LengthLimitingTextInputFormatter(1)
+                            ],
+                            focusNode: textFieldThree,
+                          )),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                              child: CustomFormField(
+                            autoFocus: true,
+                            keyboardType: TextInputType.phone,
+                            obscureText: false,
+                            onChanged: (value) {
+                              otp(value);
+                              textFieldFive.requestFocus();
+                            },
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp('[0-9]')),
+                              LengthLimitingTextInputFormatter(1)
+                            ],
+                            focusNode: textFieldFour,
+                          )),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                              child: CustomFormField(
+                            autoFocus: true,
+                            keyboardType: TextInputType.phone,
+                            obscureText: false,
+                            onChanged: (value) {
+                              otp(value);
+                            },
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp('[0-9]')),
+                              LengthLimitingTextInputFormatter(1)
+                            ],
+                            focusNode: textFieldFive,
+                          )),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      validationTextVisible
+                          ? const Text("Please enter the OTP",
+                              style: TextStyle(
+                                color: Colors.red,
+                              ))
+                          : const SizedBox()
+                    ],
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              )
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text(
+                        "Use Password",
+                        style: TextStyle(color: Color(0xff26458C)),
+                      ),
+                      Text(
+                        "Resend Code",
+                        style: TextStyle(color: Color(0xff26458C)),
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 100,
+                ),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: CustomElevatedButton(
+                      onButtonClicked: () {
+                        if (otpList.length >= 5) {
+                          Routes.navigateToPage(
+                            context,
+                            Routes.LOCATION,
+                          );
+                        } else {
+                          setState(() {
+                            validationTextVisible = true;
+                          });
+                        }
+                      },
+                      backgroundColor: const Color(0xff0312A91),
+                      textColor: whiteColor,
+                      title: 'Verify',
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                )
+              ],
+            ),
           ),
         ),
       ),

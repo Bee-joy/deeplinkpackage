@@ -8,7 +8,14 @@ class CustomClassModel {
   bool? phoneTextfield = false;
   bool? showPolicy = true;
 
-  CustomClassModel(this.title, this.description, this.hintText, this.fieldTitle,
-      this.nextFormTitle,
-      {this.editOption, this.phoneTextfield, this.showPolicy});
+  CustomClassModel(
+    this.title,
+    this.description,
+    this.hintText,
+    this.fieldTitle,
+    this.nextFormTitle, {
+    this.editOption,
+    this.phoneTextfield,
+    this.showPolicy,
+  });
 }
